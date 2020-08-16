@@ -10,6 +10,7 @@ const CupomController = require('./controllers/CupomController');
 const routes = new express.Router();
 const upload = multer(uploadConfig);
 
+routes.post('/auth', UserController.auth);
 routes.get('/user', UserController.index);
 routes.get('/user/:id', UserController.show);
 routes.post('/user', UserController.store);
@@ -18,6 +19,7 @@ routes.delete('/user/:id', UserController.destroy);
 
 routes.get('/cliente', ClienteController.index);
 routes.get('/cliente/:id', ClienteController.show);
+routes.post('/cliente/busca', ClienteController.search);
 routes.post('/cliente', ClienteController.store);
 routes.put('/cliente/:id', ClienteController.update);
 routes.delete('/cliente/:id', ClienteController.destroy);
