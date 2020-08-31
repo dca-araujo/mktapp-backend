@@ -49,7 +49,7 @@ module.exports = {
 
   async store(req, res) {
     const {
-      login, senha,
+      login, senha, email
     } = req.body;
 
     const salt = bcrypt.genSaltSync(10);
@@ -57,6 +57,7 @@ module.exports = {
     const user = await User.create({
       login,
       senha: hash,
+      email
     });
 
     return res.json(user);
