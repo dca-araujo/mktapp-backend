@@ -1,4 +1,7 @@
 const Cliente = require('../models/Cliente');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const authConfig = require('../config/auth');
 
 module.exports = {
   async index(req, res) {
@@ -91,7 +94,14 @@ module.exports = {
   },
 
   async store(req, res) {
-    const cliente = await Cliente.create(req.body);
-    return res.json(cliente);
+    try {
+        const salt = bcrypt.genSaltSync(10);
+        req.body.senha = bcrypt.hashSync(req.body.senha, salt);
+        const cliente = await Cliente.create(req.body);
+        const token = jwt.sign({ id: cliente._id }, authConfig.secret, { expiresIn: 864000 });
+        return res.json({cliente, token });
+    } catch (error) {
+        console.log(error.message);
+    }
   },
 };
