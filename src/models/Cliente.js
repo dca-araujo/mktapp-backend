@@ -10,13 +10,7 @@ const ClienteSchema = new mongoose.Schema({
         trim: true,
         lowercase: true,
         unique: true,
-        match: {
-            validator: function(email) {
-                const re = new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-                return re.test(email);
-            },
-            message: props => 'burro'
-        },
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Informe um e-mail válido'],
         validate: {
             validator: async function(email) {
                 const user = await this.constructor.findOne({ email });
@@ -28,9 +22,9 @@ const ClienteSchema = new mongoose.Schema({
                 }
                 return true;
             },
-            message: props => 'The specified email address is already in use.'
+            message: props => 'O e-mail informado já consta em nossa base de dados'
         },        
-        required: [true, "Email required"]
+        required: [true, "Informe um e-mail"]
     },
     telefone: String,
     sexo: String,

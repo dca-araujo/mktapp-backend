@@ -101,7 +101,7 @@ module.exports = {
         const token = jwt.sign({ id: cliente._id }, authConfig.secret, { expiresIn: 864000 });
         return res.json({cliente, token });
     } catch (error) {
-        console.log(error.message);
+        return res.json(error);
     }
   },
 };
