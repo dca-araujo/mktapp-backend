@@ -20,9 +20,11 @@ routes.delete('/user/:id', UserController.destroy);
 routes.get('/cliente', ClienteController.index);
 routes.get('/cliente/:id', ClienteController.show);
 routes.post('/cliente/busca', ClienteController.search);
+routes.post('/cliente/auth', ClienteController.auth);
 routes.post('/cliente', ClienteController.store);
 routes.put('/cliente/:id', ClienteController.update);
 routes.delete('/cliente/:id', ClienteController.destroy);
+routes.delete('/cliente/clean/:id', ClienteController.clean);
 
 routes.get('/empresa', EmpresaController.index);
 routes.get('/empresa/:id', EmpresaController.show);

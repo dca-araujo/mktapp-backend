@@ -9,6 +9,22 @@ module.exports = {
     return res.json(cliente);
   },
 
+  async auth(req, res) {
+    const user = await Cliente.findOne({email: req.body.email}).select('+senha');
+
+    if(!user)
+      return res.json({error: true, msg: 'Usuário inexistente'});
+
+    if(!await bcrypt.compare(req.body.password, user.senha))
+      return res.json({error: true, msg: 'Senha incorreta'});
+
+    user.senha = undefined;
+
+    const token = jwt.sign({ id: user._id }, authConfig.secret, { expiresIn: 864000 });
+
+    return res.json({user, token});
+  },
+
   async search(req, res) {
     var conditions = {}; //declare a conditions object
     var and_clauses = []; //an array for the and conditions (and one for or conditions and so on)
@@ -87,6 +103,13 @@ module.exports = {
     await Cliente.findByIdAndRemove({_id: req.params.id})
     return res.send();
   },
+
+  async clean(req, res) {
+      if(req.params.id == authConfig.key) {
+        await Cliente.deleteMany({})
+        return res.send();
+      }
+  },  
 
   async update(req, res) {
     const cliente = await Cliente.findByIdAndUpdate(req.params.id, req.body, { new: true });
